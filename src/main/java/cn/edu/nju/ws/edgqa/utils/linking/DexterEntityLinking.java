@@ -28,7 +28,7 @@ public class DexterEntityLinking {
 
     /**
      * Load json from Dexter server
-     * Note that the spot mention will be lowercase, you canDexter make it a substring of original sentence manually
+     * Note that the spot mention will be lowercase, you can make it a substring of original sentence manually
      *
      * @param url the url of Dexter service
      * @return json string
