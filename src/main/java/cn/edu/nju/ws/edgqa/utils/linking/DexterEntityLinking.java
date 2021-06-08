@@ -21,19 +21,14 @@ import java.util.List;
 
 public class DexterEntityLinking {
 
-    //public static final String dexterIP = "127.0.0.1";
     public static final String dexterIP = "114.212.190.19";
-    //public static final String dexterIP = "114.212.86.218";
     public static final String dexterSpotUrl = "http://" + dexterIP + ":8080/dexter-webapp/api/rest/spot?&wn=false&debug=false&format=text&text=";
     public static final String dexterAnnotateUrl = "http://" + dexterIP + ":8080/dexter-webapp/api/rest/annotate?&n=50&wn=false&debug=false&format=text&min-conf=0.5&text=";
-    //private static final String dexterPath = "D:\\Programs\\dexter2\\dexter-2.1.0.jar";
-    private static final String dexterPath = "D:\\Programs\\dexter2\\dexter-2.1.0.jar";
-    private static final String env = "D:\\Programs\\dexter2";
     private static boolean isStart = false;
 
     /**
      * Load json from Dexter server
-     * Note that the spot mention will be lowercase, you can make it a substring of original sentence manually
+     * Note that the spot mention will be lowercase, you canDexter make it a substring of original sentence manually
      *
      * @param url the url of Dexter service
      * @return json string
@@ -165,16 +160,5 @@ public class DexterEntityLinking {
             e1.printStackTrace();
         }
         return false;
-    }
-
-    public static void main(String[] args) throws IOException {
-
-        //System.out.println(recognizeLongE("Who has official residences at Colts Neck Township and Beverly Hills?",new LinkedHashMap<>()));
-        System.out.println(LinkingTool.recognizeLongEntity("how many nations can I find dishes made of Shallot", new LinkedHashMap<>(), KBEnum.DBpedia));
-        //System.out.println(recognizeLongELCQUAD("What is the incumbent of the Al Gore presidential campaign, 2000 and also the president of the Ann Lewis",new LinkedHashMap<>()));
-        //System.out.println(getEntityID("Barack Obama and Barack Michelle"));
-        //System.out.println(getCandidateEntityIDs("Which architect of Marine Corps Air Station Kaneohe Bay was also tenant of New Sanno hotel '/"));
-        //System.out.println(getEntityID("Barack Obama and Barack Michelle"));
-
     }
 }

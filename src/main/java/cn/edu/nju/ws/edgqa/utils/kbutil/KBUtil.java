@@ -38,7 +38,7 @@ public class KBUtil {
     private static String CORE_KB_JDBC = CORE_KB_JDBC_1604;
 
 
-    //init DataSet
+    // init DataSet
     public static void init(DatasetEnum dataset) {
 
         System.out.println("[INFO] KBUtil initializing...");
