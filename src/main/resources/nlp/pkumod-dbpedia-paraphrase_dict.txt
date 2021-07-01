@@ -2782,7 +2782,6 @@ aunts	aunties	13
 author	generator	13
 author	writer	13
 author	wrote	13
-author	create	13
 authorType	a different type	13
 authorType	a new war	13
 authorType	a third was	13
@@ -3119,8 +3118,6 @@ award	win in	60
 award	win twice	33
 award	with play for	19
 award	with win 	44
-award	won by	13
-awards	won by	13
 awardDate	award winners	13
 awardName	award winners	13
 awardNotes	and footnote	13
@@ -5921,7 +5918,6 @@ consort	choir	13
 consort	harmonize	13
 consort	run	13
 constellation	configuration	13
-constituency	come in power in	13
 constitution	amendments	18
 constitution	appointed	36
 constitution	be composed of	82
@@ -7089,7 +7085,6 @@ deathPlace	die heart attack in	200
 deathPlace	die home at	200
 deathPlace	die hospital in	133
 deathPlace	die in	200
-deathPlace	died in	200
 deathPlace	die in city of	66
 deathPlace	die in home	166
 deathPlace	die in home at	100
@@ -10351,7 +10346,6 @@ family	class	13
 family	familial	13
 family	kin	13
 family	syndicate	13
-family	family members	13
 fareZone	far away	13
 fastTime	first is that	13
 fastTime	very first time	13
@@ -13026,7 +13020,6 @@ interest	pastime	13
 interest	posted	13
 interest	sake	13
 international	external	13
-international	fall under the International	13
 internationally	globally	13
 internationally	internationales	13
 internationally	nations	13
@@ -16994,7 +16987,6 @@ monuments	memorial	13
 monuments	minutes	13
 monuments	monument	13
 monuments	repository	13
-moons	satellites	13
 mop	pout	13
 mop	swab	13
 mop	wipe_up	13
@@ -17124,7 +17116,6 @@ nationalFed	national general	13
 nationalFed	national working	13
 nationalMotto	children and youth	13
 nationalOrigin	nationalities in	13
-nationalOrigin	originate	13
 nationalTeam	flag is	13
 nationalTeam	government debts	13
 nationalTeam	national focal points	13
@@ -17297,7 +17288,6 @@ notableWork	book in	33
 notableWork	create	33
 notableWork	film	33
 notableWork	for film	66
-notableWork	have done by	13
 notableWork	have win	100
 notableWork	have win as	33
 notableWork	have win twice	66
@@ -18845,7 +18835,6 @@ owningCompany	when purchase	11
 owningCompany	which sell	18
 owningCompany	wholly own subsidiary	77
 owningCompany	wholly own subsidiary of base in	14
-owns	founders	13
 page	coverpages	13
 page	foliate	13
 page	homepages	13
@@ -21766,7 +21755,6 @@ prizes	pry	13
 prizes	recipients	13
 prizes	respect	13
 prizes	trophy	13
-prizes	winning scientists	13
 proTem	address the problem	13
 proTem	set of problems	13
 processor	central_processing_unit	13
@@ -29468,8 +29456,8 @@ traversed	transected	13
 traversed	traveled	13
 traversed	traverse	13
 traversed	trodden	13
-treeNode	corner	13
-treeNode	trees	13
+tree	corner	13
+tree	trees	13
 trend	course	13
 trend	declining	13
 trend	decreasing	13
