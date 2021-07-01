@@ -8,7 +8,6 @@ from bert.tokenization import FullTokenizer, validate_case_matches_checkpoint
 from flask import Flask, request, jsonify, json
 from bert.modeling import BertConfig
 from bert.run_classifier import InputExample, convert_single_example, model_fn_builder
-# from run_classifier_with_tfhub import create_tokenizer_from_hub_module, model_fn_builder
 
 
 class Service(object):
@@ -88,7 +87,7 @@ class Service(object):
         return estimator
 
     def get_feature(self, text_a, text_b, index=1):
-        """单文本的feature生成"""
+        """generate feature for a single case"""
         guid = text_a+","+text_b
         example = InputExample(guid, text_a, text_b, "0")
         feature = convert_single_example(
@@ -96,7 +95,7 @@ class Service(object):
         return feature.input_ids, feature.input_mask, feature.segment_ids, feature.label_id
 
     def get_feature_batch(self, text_a_batch, text_b_batch, batch_size):
-        """"一个batch的feature生成"""
+        """"generate feature for a batch of cases"""
         input_ids = []
         input_mask = []
         segment_ids = []
@@ -113,18 +112,10 @@ class Service(object):
         return input_ids, input_mask, segment_ids, label_ids
 
     def create_generator(self):
-        """构建生成器"""
+        """create a generator to feed in the estimator"""
         while not self.closed:
             features = self.get_feature_batch(
                 self.mention, self.relation, self.batch_size)
-            # print("features:"+str(features))
-            # name_to_features = {
-            #     "input_ids": tf.FixedLenFeature([self.max_seq_length], tf.int64),
-            #     "input_mask": tf.FixedLenFeature([self.max_seq_length], tf.int64),
-            #     "segment_ids": tf.FixedLenFeature([self.max_seq_length], tf.int64),
-            #     "label_ids": tf.FixedLenFeature([], tf.int64),
-            # }
-            # feature_dict = tf.parse_single_example(features,name_to_features)
             feature_dict = {
                 "input_ids": features[0],
                 "input_mask": features[1],
@@ -132,12 +123,9 @@ class Service(object):
                 "label_ids": features[3]
             }
             yield feature_dict
-            # yield dict(zip(("input_ids", "input_mask", "segment_ids", "label_ids"), zip(*features)))
 
     def input_fn_builder(self, params):
-        # batch_size=params["size"]
-        """对单独预测数据进行创建，不基于文件数据"""
-        # item = self.create_generator.next()
+        """input_fn from generator"""
         dataset = tf.data.Dataset.from_generator(
             self.create_generator,
             output_types={
@@ -166,9 +154,6 @@ class Service(object):
             self.first_run = False
 
         probabilities = next(self.predictions)['probabilities']
-        # print(probabilities)
-        # return probabilities[0][1]
-        # print(type(probabilities))
         return probabilities[:, 1]
 
     def close(self):
@@ -191,7 +176,6 @@ def relation_detection_service():
         question = params['question']
         batch_size = len(rel_labels)
         questions = [question for i in range(len(rel_labels))]
-        #questions = [question*len(rel_lables)]
 
         if batch_size==0:
             return jsonify({'detection_res':[]})
@@ -209,7 +193,7 @@ def relation_detection(text_a: list, text_b: list, batch_size: int, service: Ser
 if __name__ == "__main__":
 
     # not using GPU
-    os.environ['CUDA_VISIBLE_DEVICES'] = '1'
+    os.environ['CUDA_VISIBLE_DEVICES'] = ''
     service = Service()
 
     # set the log level
@@ -219,7 +203,6 @@ if __name__ == "__main__":
     result = relation_detection(
         ['owns the websites for writes', 'owns the websites for writes'], ['owner', 'result'], 2, service)
     print('result:' + str(result))
-    # service.close()
 
     # 0.0.0.0 makes it externally visible
     app.run(host="0.0.0.0", port=5682, debug=False)

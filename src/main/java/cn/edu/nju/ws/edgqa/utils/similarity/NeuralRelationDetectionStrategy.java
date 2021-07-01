@@ -25,7 +25,7 @@ public class NeuralRelationDetectionStrategy implements SimilarityStrategy {
     private static final String serverIP = "114.212.190.19";
     private static final int serverPort = 5678;
     private static final String serviceURL = "http://" + serverIP + ":" + serverPort + "/relation_detection";
-    private static final int set_sparql_serverPort_LCQUAD = 5683;
+    private static final int set_sparql_serverPort_LCQUAD = 5684;
     private static final int set_sparql_serverPort_QALD = 5684;
     private static HttpURLConnection conn = null;
     private static int set_serverPort = 5682;
@@ -80,14 +80,14 @@ public class NeuralRelationDetectionStrategy implements SimilarityStrategy {
         try {
             JSONArray array = new JSONArray(labelArr);
 
-            String input = "{\"question\": \"" + question + "\", \"labels\": " + array + "}";
+            String input = "{\"edg_block\": \"" + question + "\", \"sparql_queries\": " + array + "}";
             //System.out.println(input);
             String set_sparql_serviceURL = "http://" + serverIP + ":" + port + "/query_rerank";
             String output = HttpsClientUtil.doPost(set_sparql_serviceURL, input);
             Gson gson = new Gson();
             Map<String, Double[]> map = gson.fromJson(String.valueOf(output), new TypeToken<Map<String, Double[]>>() {
             }.getType());
-            detection_res = map.get("detection_res");
+            detection_res = map.get("rerank_res");
 
         } catch (Exception e) {
             e.printStackTrace();

@@ -8,7 +8,6 @@ from bert.tokenization import FullTokenizer, validate_case_matches_checkpoint
 from flask import Flask, request, jsonify, json
 from bert.modeling import BertConfig
 from bert.run_classifier import InputExample, convert_single_example, model_fn_builder
-# from run_classifier_with_tfhub import create_tokenizer_from_hub_module, model_fn_builder
 
 
 class Service(object):
@@ -28,9 +27,9 @@ class Service(object):
         self.closed = False
         self.first_run = True
 
-        # mention and relation to predict
-        self.mention = ["A"]
-        self.relation = ["B"]
+        # edg_block and sparql_queries to predict
+        self.edg_block = ["A"]
+        self.sparql_queries = ["B"]
         self.batch_size = 1
 
         # predictions
@@ -88,7 +87,7 @@ class Service(object):
         return estimator
 
     def get_feature(self, text_a, text_b, index=1):
-        """单文本的feature生成"""
+        """generate feature for a single case"""
         guid = text_a+","+text_b
         example = InputExample(guid, text_a, text_b, "0")
         feature = convert_single_example(
@@ -96,7 +95,7 @@ class Service(object):
         return feature.input_ids, feature.input_mask, feature.segment_ids, feature.label_id
 
     def get_feature_batch(self, text_a_batch, text_b_batch, batch_size):
-        """"一个batch的feature生成"""
+        """"generate feature for a batch of cases"""
         input_ids = []
         input_mask = []
         segment_ids = []
@@ -113,18 +112,10 @@ class Service(object):
         return input_ids, input_mask, segment_ids, label_ids
 
     def create_generator(self):
-        """构建生成器"""
+        """create a generator to feed in the estimator"""
         while not self.closed:
             features = self.get_feature_batch(
-                self.mention, self.relation, self.batch_size)
-            # print("features:"+str(features))
-            # name_to_features = {
-            #     "input_ids": tf.FixedLenFeature([self.max_seq_length], tf.int64),
-            #     "input_mask": tf.FixedLenFeature([self.max_seq_length], tf.int64),
-            #     "segment_ids": tf.FixedLenFeature([self.max_seq_length], tf.int64),
-            #     "label_ids": tf.FixedLenFeature([], tf.int64),
-            # }
-            # feature_dict = tf.parse_single_example(features,name_to_features)
+                self.edg_block, self.sparql_queries, self.batch_size)
             feature_dict = {
                 "input_ids": features[0],
                 "input_mask": features[1],
@@ -132,12 +123,9 @@ class Service(object):
                 "label_ids": features[3]
             }
             yield feature_dict
-            # yield dict(zip(("input_ids", "input_mask", "segment_ids", "label_ids"), zip(*features)))
 
     def input_fn_builder(self, params):
-        # batch_size=params["size"]
-        """对单独预测数据进行创建，不基于文件数据"""
-        # item = self.create_generator.next()
+        """input_fn from generator"""
         dataset = tf.data.Dataset.from_generator(
             self.create_generator,
             output_types={
@@ -157,8 +145,8 @@ class Service(object):
         return dataset
 
     def predict(self, text_a, text_b, batch_size):
-        self.mention = text_a
-        self.relation = text_b
+        self.edg_block = text_a
+        self.sparql_queries = text_b
         self.batch_size = batch_size
         if self.first_run:
             self.predictions = self.estimator.predict(
@@ -166,9 +154,6 @@ class Service(object):
             self.first_run = False
 
         probabilities = next(self.predictions)['probabilities']
-        # print(probabilities)
-        # return probabilities[0][1]
-        # print(type(probabilities))
         return probabilities[:, 1]
 
     def close(self):
@@ -178,29 +163,28 @@ class Service(object):
 app = Flask(__name__)
 
 
-@ app.route('/relation_detection', methods=['POST'])
-def relation_detection_service():
+@ app.route('/query_rerank', methods=['POST'])
+def query_rerank_service():
     """
-    params['question']: natural language question
-    params['label']: candidate predicate label
+    params['edg_block']: edg block in the form of sequence
+    params['sparql_queries']: candidate sparqls in the form sequences
     """
     if request.method == 'POST':
         decoded_data = request.data.decode('utf-8')
         params = json.loads(decoded_data)
-        rel_labels = params['labels']
-        question = params['question']
-        batch_size = len(rel_labels)
-        questions = [question for i in range(len(rel_labels))]
-        #questions = [question*len(rel_lables)]
+        edg_block = params['edg_block']
+        sparql_queries = params['sparql_queries']
+        batch_size = len(sparql_queries)
+        edg_blocks_duplicate = [edg_block for i in range(len(sparql_queries))]
 
         if batch_size==0:
-            return jsonify({'detection_res':[]})
-        res = relation_detection(questions, rel_labels, batch_size, service)
+            return jsonify({'rerank_res':[]})
+        res = query_rerank(edg_blocks_duplicate, sparql_queries, batch_size, service)
         print("res:"+str(res))
-        return jsonify({'detection_res': res.tolist()})
+        return jsonify({'rerank_res': res.tolist()})
 
 
-def relation_detection(text_a: list, text_b: list, batch_size: int, service: Service):
+def query_rerank(text_a: list, text_b: list, batch_size: int, service: Service):
     print("[INFO] text_a: " + str(text_a) + " , text_b: " +
           str(text_b)+"batch_size:"+str(batch_size))
     return service.predict(text_a, text_b, batch_size)
@@ -209,17 +193,17 @@ def relation_detection(text_a: list, text_b: list, batch_size: int, service: Ser
 if __name__ == "__main__":
 
     # not using GPU
-    os.environ['CUDA_VISIBLE_DEVICES'] = '0'
+    os.environ['CUDA_VISIBLE_DEVICES'] = ''
     service = Service()
 
     # set the log level
     tf.logging.set_verbosity(tf.logging.INFO)
 
     # initialize
-    result = relation_detection(
-        ['owns the websites for writes', 'owns the websites for writes'], ['owner', 'result'], 2, service)
+    result = query_rerank(
+        ['[BLK]  [DES] are the bands associated with #entity1 [BLK]  [DES] the artists of My Favorite Girl'], ['\t [TRP] ?e1 Artist My Favorite Girl (Dave Hollister song) [TRP] ?e0 associated musical artist ?e1'], 1, service)
+
     print('result:' + str(result))
-    # service.close()
 
     # 0.0.0.0 makes it externally visible
     app.run(host="0.0.0.0", port=5684, debug=False)
