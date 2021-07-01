@@ -1,6 +1,6 @@
 # EDGQA
 
-Codes for "EDG-based Question Decomposition for Complex Question Answering over Knowledge Bases".
+Codes for ISWC 2021 research track paper "EDG-based Question Decomposition for Complex Question Answering over Knowledge Bases".
 
 ## 1. Requirements
 
