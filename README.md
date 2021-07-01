@@ -53,6 +53,8 @@ Because the linking tool consumes a lot of time, caching the linking results of 
 of the test. The cache needs to be built the first time the QA is run and is available when it is run again. Use the
 arguments `use_cache` and `create_cache` above to set the cache tool.
 
+**[Optional]** The cache of linking results is available on this [Google Drive dir](https://drive.google.com/drive/folders/1-JX9VfyDqA51aVZ35HSCtSkvTLpsc-Aw?usp=sharing). Please set it to the current directory, i.e., `EDGQA/cache`. It is optional for running EDGQA. 
+
 ### 2.2 PointerNetwork Arguments
 
 Run `cn/edu/nju/ws/edgqa/handler/PointerNetworkQA.java` by following CLI arguments:
@@ -64,12 +66,8 @@ Run `cn/edu/nju/ws/edgqa/handler/PointerNetworkQA.java` by following CLI argumen
 ## 3. Resources
 
 - [PKUmod paraphrase dict](https://github.com/pkumod/Paraphrase/blob/master/dic.txt)
-- [QALD-6](https://qald.aksw.org/index.php?x=home&q=6)
-- [QALD-7](https://project-hobbit.eu/challenges/qald2017/)
-- [QALD-8](https://project-hobbit.eu/challenges/qald-8-challe3nge/)
 - [QALD-9](http://2018.nliwod.org/challenge)
-- [syntax treeNode tool](http://mshang.ca/syntree/)
-- [BERT](https://github.com/google-research/bert)
+- [BERT by Google Research](https://github.com/google-research/bert)
 
 ## 4. Contact
 
