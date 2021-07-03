@@ -4,7 +4,7 @@
     <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
     <option name="MAIN_CLASS_NAME" value="cn.edu.nju.ws.edgqa.handler.EDGQA" />
     <module name="EDGQA" />
-    <option name="PROGRAM_PARAMETERS" value="-d lc-quad" />
+    <option name="PROGRAM_PARAMETERS" value="-d lc-quad -uc true" />
     <extension name="coverage">
       <pattern>
         <option name="PATTERN" value="cn.edu.nju.ws.edgqa.handler.*" />

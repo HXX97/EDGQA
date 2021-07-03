@@ -353,13 +353,13 @@ public class QAArgs {
         goldenType.setRequired(false);
         options.addOption(goldenType);
 
-        Option createGoldenCache = new Option("cc", "create_cache", true, "whether to create file cache for global linking");
-        createGoldenCache.setRequired(false);
-        options.addOption(createGoldenCache);
+        Option createLinkingCache = new Option("cc", "create_cache", true, "whether to create file cache for global linking");
+        createLinkingCache.setRequired(false);
+        options.addOption(createLinkingCache);
 
-        Option useGoldenCache = new Option("uc", "use_cache", true, "whether to use file cache for golden linking");
-        useGoldenCache.setRequired(false);
-        options.addOption(useGoldenCache);
+        Option useLinkingCache = new Option("uc", "use_cache", true, "whether to use file cache for golden linking");
+        useLinkingCache.setRequired(false);
+        options.addOption(useLinkingCache);
 
         Option entityLinkingThreadTimeLimit = new Option("elt", "el_time", true, "the time limit for each entity linking thread");
         entityLinkingThreadTimeLimit.setRequired(false);
@@ -485,8 +485,8 @@ public class QAArgs {
             setCreatingLinkingCache("true".equals(create_global_cache));
         }
         if (commandLine.hasOption("use_cache")) {
-            String useGoldenCacheArg = commandLine.getOptionValues("use_cache")[0].toLowerCase();
-            setUsingLinkingCache("true".equals(useGoldenCacheArg));
+            String useLinkingCache = commandLine.getOptionValues("use_cache")[0].toLowerCase();
+            setUsingLinkingCache("true".equals(useLinkingCache));
         }
         if (commandLine.hasOption("el_time")) {
             QuestionSolver.setEntityLinkingThreadTimeLimit(Integer.parseInt(commandLine.getOptionValues("el_time")[0]));
