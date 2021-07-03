@@ -61,7 +61,7 @@ public class EDGQA extends QASystem {
         String isTrain = QAArgs.isIsTraining() ? "train" : "test";
 
         String logFileName = getLogFileName();  // get log file name
-        LogUtil.addWriter("queryLog", "querylogs/query_log_" + isTrain + "_" + logFileName + ".txt", true);
+        LogUtil.addWriter("queryLog", "query_logs/query_log_" + isTrain + "_" + logFileName + ".txt", true);
 
         CumulativeIRMetrics cumulativeIRMetrics = new CumulativeIRMetrics(); // precision, recall, micro F1, macro F1
         CumulativeIRMetrics qaldCumulativeIRMetrics = new CumulativeIRMetrics(); // QALD precision, recall, micro F1, QALD macro F1

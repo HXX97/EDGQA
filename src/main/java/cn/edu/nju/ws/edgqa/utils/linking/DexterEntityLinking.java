@@ -24,72 +24,11 @@ public class DexterEntityLinking {
     public static final String dexterIP = "114.212.190.19";
     public static final String dexterSpotUrl = "http://" + dexterIP + ":8080/dexter-webapp/api/rest/spot?&wn=false&debug=false&format=text&text=";
     public static final String dexterAnnotateUrl = "http://" + dexterIP + ":8080/dexter-webapp/api/rest/annotate?&n=50&wn=false&debug=false&format=text&min-conf=0.5&text=";
-    private static boolean isStart = false;
-
-    /**
-     * Load json from Dexter server
-     * Note that the spot mention will be lowercase, you can make it a substring of original sentence manually
-     *
-     * @param url the url of Dexter service
-     * @return json string
-     */
-    public static String loadJson(String url) {
-        StringBuilder json = new StringBuilder();
-        try {
-            URL urlObject = new URL(url);
-            URLConnection uc = urlObject.openConnection();
-            BufferedReader in = new BufferedReader(new InputStreamReader(uc.getInputStream(), StandardCharsets.UTF_8));
-            String line = null;
-            while ((line = in.readLine()) != null) {
-                json.append(line);
-            }
-            in.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return json.toString();
-    }
-
-    /**
-     * Return the Entity and corresponding ID recognized by dexter2
-     *
-     * @param question
-     * @return
-     */
-    public static HashMap<String, Integer> getEntityID(String question) {
-        //String question = "What is the total population of Melbourne, Florida?";
-        HashMap<String, Integer> map = new HashMap<>();
-        String questionURL = null;
-        try {
-            questionURL = URLEncoder.encode(question, "UTF-8");
-            String url = dexterAnnotateUrl + questionURL;
-            String jsonData = loadJson(url);
-            JSONObject object = new JSONObject(jsonData);
-            JSONArray jsonArray = object.getJSONArray("spots");
-            //System.out.println(jsonArray);
-
-            for (int i = 0; i < jsonArray.length(); i++) {
-                JSONObject spot = jsonArray.getJSONObject(i);
-                spot.put("mention", question.substring(spot.getInt("start"), spot.getInt("end"))); // keep the original case
-                String mention = spot.getString("mention");
-                int mentionLen = mention.split(" ").length;
-                map.put(mention, spot.getInt("entity"));
-                //System.out.println("[" + mentionLen + "]" + question + ": " + mention + " score: " + spot.get("score") + " id: " + spot.get("entity"));
-            }
-
-
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
-
-        return map;
-
-    }
 
     /**
      * return entity and its candidateID detected by dexter2
      *
-     * @param question
+     * @param question natural language question
      * @return {mention:wikiID} map
      */
     public static HashMap<String, List<Integer>> getCandidateEntityIDs(String question) {
@@ -160,5 +99,10 @@ public class DexterEntityLinking {
             e1.printStackTrace();
         }
         return false;
+    }
+
+    public static void main(String[] args){
+        String question = "Which architect of Marine Corps Air Station Kaneohe Bay was also tenant of New Sanno hotel";
+        System.out.println(getCandidateEntityIDs(question));
     }
 }

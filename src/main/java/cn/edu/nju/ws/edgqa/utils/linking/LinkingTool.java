@@ -31,24 +31,22 @@ public class LinkingTool {
     // earl server IP and port
     private static final String earlServerIP = "114.212.190.19";
     private static final int earlServerPort = 4999;
+    private static final String earlLocalURL = "http://" + earlServerIP + ":" + earlServerPort + "/processQuery";
+    private static final String earlLiveURL = "http://ltdemos.informatik.uni-hamburg.de/earl/processQuery";
 
     // falcon server IP and portF
     private static final String falconServerlIP = "114.212.190.19";
     private static final int falconServerPort = 9876;
+    private static final String falconLocalURL = "http://" + falconServerlIP + ":" + falconServerPort + "/annotate?k=";
+    private static final String falconLiveURL = "https://labs.tib.eu/falcon/api?mode=long&k=";
 
-    // DBpedia spotlight IP and port
-    private static final String dbpediaSpotlightIP = "114.212.190.19";
-    private static final String dbpediaSpotlightPort = "2222";
-
-    private static final String earlLocalURL = "http://" + earlServerIP + ":" + earlServerPort + "/processQuery";
-    private static final String falcon1LongURL = "http://" + falconServerlIP + ":" + falconServerPort + "/annotate";
-    private static final String dbpediaSpotlightURL = "http://" + dbpediaSpotlightIP + ":" + dbpediaSpotlightPort + "/rest/annotate?confidence=0.5&text=";
-
+    private static final String earlURL = earlLocalURL;
+    private static final String falconURL = falconLocalURL;
 
     /**
      * Enter a sentence and return the result Map of EARL Linking (including relations and entities at the same time)
      *
-     * @param sentence
+     * @param sentence natural language question
      * @return EARL link result map
      */
     public static Map<String, List<Link>> getEARLLinking(String sentence) {
@@ -66,7 +64,7 @@ public class LinkingTool {
         while (tryTime < 2 && result.size() == 0) {
             try {
 
-                String jsonString = HttpsClientUtil.doPost(earlLocalURL, jsonObject.toString());
+                String jsonString = HttpsClientUtil.doPost(earlURL, jsonObject.toString());
                 //System.out.println(jsonString);
                 if (jsonString != null) {
                     JSONObject o1 = new JSONObject(jsonString);
@@ -112,7 +110,7 @@ public class LinkingTool {
     /**
      * Enter a sentence and return the result Map of falcon Linking (including relations and entities at the same time). By default, each Mention returns 10 candidates
      *
-     * @param sentence
+     * @param sentence natural language question
      * @return Link result map
      */
     public static Map<String, List<Link>> getFalconLinking(String sentence) {
@@ -130,8 +128,7 @@ public class LinkingTool {
             jsonObject.put("k", k);
             try {
 
-                String url = falcon1LongURL;// + "k=" + k;
-                //String response = HttpUtil.sendPost(url, jsonObject.toString());
+                String url = falconURL+ k;
                 String response = HttpsClientUtil.doPost(url, jsonObject.toString());
                 //System.out.println(response);
                 if (response != null) {
@@ -190,28 +187,11 @@ public class LinkingTool {
         return result;
     }
 
-    /**
-     * Enter a sentence, return the result Map of falcon Linking, each Mention returns the first k candidates, k<=10
-     *
-     * @param sentence
-     * @param k        top k candidate for every mention
-     * @return result Map
-     */
-    public static Map<String, List<Link>> getFalconLinking(String sentence, int k) {
-        Map<String, List<Link>> falconLinking = getFalconLinking(sentence);
-        for (String key : falconLinking.keySet()) {
-            List<Link> linkList = falconLinking.get(key);
-            while (linkList.size() > k) {
-                linkList.remove(k);
-            }
-        }
-        return falconLinking;
-    }
 
     /**
      * Enter a sentence and return the dexter entity linking result Map
      *
-     * @param sentence
+     * @param sentence natural language question
      * @return dexter entity linking Map
      */
     public static Map<String, List<Link>> getDexterLinking(String sentence) {
@@ -236,54 +216,6 @@ public class LinkingTool {
         if (QAArgs.isCreatingLinkingCache())
             CacheUtil.getDexterMap().put(sentence, result);
         return result;
-    }
-
-    public static Map<String, List<Link>> getDBpediaSpotLinking(String sentence) {
-        Map<String, List<Link>> result = new ConcurrentHashMap<>();
-        int tryTime = 0;
-        while (tryTime < 2 && result.size() == 0) {
-            try {
-                //setHttpProxy();
-                String url = dbpediaSpotlightURL + URLEncoder.encode(sentence, "UTF-8");
-                //String jsonStr = HttpUtil.sendGet(url);
-                String jsonStr = HttpsClientUtil.doGet(url);
-                //System.out.println(jsonStr);
-                if (jsonStr != null) {
-                    JSONObject jsonObject = new JSONObject(jsonStr);
-
-
-                    if (jsonObject.keySet().contains("Resources")) {
-                        JSONArray jsonArray = jsonObject.getJSONArray("Resources");
-                        int num = jsonArray.length();
-
-                        for (int i = 0; i < num; i++) {
-                            String link = jsonArray.getJSONObject(i).getString("@URI");
-                            //double score = jsonArray.getJSONObject(i).getDouble("@similarityScore");
-                            String surface = jsonArray.getJSONObject(i).getString("@surfaceForm");
-                            if (result.containsKey(surface)) {
-                                List<Link> list = result.get(surface);
-                                list.add(new Link(surface, link, LinkEnum.ENTITY));
-
-                            } else {
-                                ArrayList<Link> list = new ArrayList<>();
-                                list.add(new Link(surface, link, LinkEnum.ENTITY));
-                                result.put(surface, list);
-                            }
-
-                        }
-                    }
-                }
-
-            } catch (Exception e) {
-                e.printStackTrace();
-            } finally {
-                tryTime++;
-                //unsetHttpProxy();
-            }
-        }
-
-        return result;
-
     }
 
     /**
@@ -810,12 +742,15 @@ public class LinkingTool {
     public static void main(String[] args) throws IOException {
 
 
-        //String question = "Where did these popular aeroplanes - Focke Wulf 260 and Start+Flug H 101 originate?";
-        String question = "Is the wife of President Obama called Michelle?";
+        String question = "Where did these popular aeroplanes - Focke Wulf 260 and Start+Flug H 101 originate?";
+        //String question = "Is the wife of President Obama called Michelle?";
 
         System.out.println("dexter linking:" + getDexterLinking(question));
+        System.out.println("========================================");
         System.out.println("earl linking:" + getEARLLinking(question));
+        System.out.println("========================================");
         System.out.println("falcon linking:" + getFalconLinking(question));
+        System.out.println("========================================");
         /*HashMap<String, List<Link>> eLinkMap = new HashMap<>();
         HashMap<String, List<Link>> rLinkMap = new HashMap<>();
         getEnsembleLinking(question, eLinkMap, rLinkMap);

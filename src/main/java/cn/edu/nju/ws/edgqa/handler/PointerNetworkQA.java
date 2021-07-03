@@ -77,8 +77,8 @@ public class PointerNetworkQA extends QASystem {
         long startTime = System.currentTimeMillis(); // for timing
 
         String logFileName = getLogFileName();  // get log file name
-        LogUtil.addWriter("queryLog", "baseline_querylogs/query_log_" + logFileName + ".txt", true);
-        LogUtil.addWriter("ansErrLog", "baseline_querylogs/ERR_Question_" + logFileName + ".txt", false);
+        LogUtil.addWriter("queryLog", "baseline_query_logs/query_log_" + logFileName + ".txt", true);
+        LogUtil.addWriter("ansErrLog", "baseline_query_logs/ERR_Question_" + logFileName + ".txt", false);
 
         CumulativeIRMetrics cumulativeIRMetrics = new CumulativeIRMetrics();   // precision, recall, micro F1, macro F1
         CumulativeIRMetrics cumulativeQALDMetrics = new CumulativeIRMetrics(); // for QALD measure
