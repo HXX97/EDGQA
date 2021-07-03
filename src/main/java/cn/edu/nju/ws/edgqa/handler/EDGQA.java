@@ -554,7 +554,7 @@ public class EDGQA extends QASystem {
         System.out.println("[INFO] Dataset: " + QAArgs.getDatasetName() + ", " + set + " set");
         System.out.println("[INFO] Creating cache: " + QAArgs.isCreatingLinkingCache());
         System.out.println("[INFO] Using cache: " + QAArgs.isUsingLinkingCache());
-        System.out.println("[INFO] Reranking :" + QAArgs.isReRanking());
+        System.out.println("[INFO] Reranking: " + QAArgs.isReRanking());
 
         //EDG init
         EDG.init(dataset);
