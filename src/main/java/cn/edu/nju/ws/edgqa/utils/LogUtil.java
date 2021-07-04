@@ -1,5 +1,6 @@
 package cn.edu.nju.ws.edgqa.utils;
 
+import cn.edu.nju.ws.edgqa.main.QAArgs;
 import cn.edu.nju.ws.edgqa.utils.enumerates.LogType;
 
 import java.io.BufferedWriter;

@@ -1,7 +1,7 @@
 package cn.edu.nju.ws.edgqa.handler;
 
+import cn.edu.nju.ws.edgqa.main.QAArgs;
 import cn.edu.nju.ws.edgqa.utils.CacheUtil;
-import cn.edu.nju.ws.edgqa.utils.QAArgs;
 import cn.edu.nju.ws.edgqa.utils.SimilarityUtil;
 
 import java.io.IOException;

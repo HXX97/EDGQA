@@ -2,7 +2,9 @@ package cn.edu.nju.ws.edgqa.utils;
 
 
 import cn.edu.nju.ws.edgqa.domain.beans.Link;
+import cn.edu.nju.ws.edgqa.main.QAArgs;
 import cn.edu.nju.ws.edgqa.handler.QuestionSolver;
+import cn.edu.nju.ws.edgqa.utils.semanticmatching.NeuralSemanticMatchingScorer;
 import cn.edu.nju.ws.edgqa.utils.similarity.*;
 import org.jetbrains.annotations.NotNull;
 
@@ -48,7 +50,7 @@ public class SimilarityUtil {
         }
 
         if (!candidates.isEmpty()) {
-            Map<String, Double> relationScoreMap = NeuralRelationDetectionStrategy.scoreSet_relation(mention, candidates);
+            Map<String, Double> relationScoreMap = NeuralSemanticMatchingScorer.relation_semantic_matching_score(mention, candidates);
             if (QAArgs.isUsingRelationSimilarityCache()) { // update cache
                 for (String candidate : relationScoreMap.keySet()) {
                     relationSimilarityCache.put(mention + "||" + candidate, relationScoreMap.get(candidate));

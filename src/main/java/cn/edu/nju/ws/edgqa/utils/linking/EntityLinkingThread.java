@@ -1,4 +1,4 @@
-package cn.edu.nju.ws.edgqa.handler;
+package cn.edu.nju.ws.edgqa.utils.linking;
 
 import cn.edu.nju.ws.edgqa.domain.beans.Link;
 import cn.edu.nju.ws.edgqa.utils.linking.LinkingTool;

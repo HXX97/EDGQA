@@ -4,7 +4,7 @@ import cn.edu.nju.ws.edgqa.domain.beans.Link;
 import cn.edu.nju.ws.edgqa.domain.beans.Span;
 import cn.edu.nju.ws.edgqa.handler.Detector;
 import cn.edu.nju.ws.edgqa.utils.CacheUtil;
-import cn.edu.nju.ws.edgqa.utils.QAArgs;
+import cn.edu.nju.ws.edgqa.main.QAArgs;
 import cn.edu.nju.ws.edgqa.utils.SimilarityUtil;
 import cn.edu.nju.ws.edgqa.utils.UriUtil;
 import cn.edu.nju.ws.edgqa.utils.connect.HttpsClientUtil;
@@ -18,7 +18,6 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.net.URLEncoder;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.regex.Matcher;
@@ -27,6 +26,10 @@ import java.util.stream.Collectors;
 
 
 public class LinkingTool {
+
+    //dexter server IP and port
+    public static final String dexterIP = "114.212.190.19";
+    public static final String dexterLocalUrl = "http://" + dexterIP + ":8080/dexter-webapp/api/rest/spot";
 
     // earl server IP and port
     private static final String earlServerIP = "114.212.190.19";
@@ -198,7 +201,7 @@ public class LinkingTool {
         if (QAArgs.isUsingLinkingCache() && CacheUtil.getDexterMap() != null && CacheUtil.getDexterMap().containsKey(sentence))
             return CacheUtil.getDexterMap().get(sentence);
 
-        Map<String, List<Integer>> candidateEntityIDs = DexterEntityLinking.getCandidateEntityIDs(sentence);
+        Map<String, List<Integer>> candidateEntityIDs = getCandidateEntityIDs_dexter(sentence);
         //System.out.println("Candidate ID:"+candidateEntityIDs);
         Map<String, List<Link>> result = new ConcurrentHashMap<>();
         for (String key : candidateEntityIDs.keySet()) {
@@ -739,6 +742,86 @@ public class LinkingTool {
         return question;
     }
 
+    /**
+     * return entity and its candidateID detected by dexter2
+     *
+     * @param question natural language question
+     * @return {mention:wikiID} map
+     */
+    public static HashMap<String, List<Integer>> getCandidateEntityIDs_dexter(String question) {
+
+        HashMap<String, List<Integer>> result = new HashMap<>();
+
+        String url = null;
+
+        JSONObject inputObj = new JSONObject();
+        inputObj.put("text", question);
+        inputObj.put("wn", "false");
+        inputObj.put("debug", "false");
+        inputObj.put("format", "text");
+
+        url = dexterLocalUrl;
+        String jsonString = HttpsClientUtil.doPostWithParams(url, inputObj);
+
+        if(jsonString!=null&&!jsonString.isEmpty()) {
+            JSONObject jsonObject = new JSONObject(jsonString);
+            //System.out.println(jsonObject.toString(4));
+            JSONArray spots = jsonObject.getJSONArray("spots");
+            // System.out.println(spots);
+            for (int i = 0; i < spots.length(); i++) {
+                List<Integer> res = new LinkedList<>();
+                // the substring of question has the original case
+                spots.getJSONObject(i).put("mention",
+                        question.substring(spots.getJSONObject(i).getInt("start"), spots.getJSONObject(i).getInt("end")));
+                String mention = spots.getJSONObject(i).getString("mention");
+                double linkProbability = spots.getJSONObject(i).getDouble("linkProbability");
+                if (linkProbability < 0.5) {
+                    continue;
+                }
+                JSONArray candidates = spots.getJSONObject(i).getJSONArray("candidates");
+                for (int j = 0; j < Math.min(candidates.length(), 5); j++) {//Only take top5
+                    res.add(candidates.getJSONObject(j).getInt("entity"));
+                }
+                result.put(mention, res);
+            }
+        }
+        return result;
+    }
+
+    /**
+     * judge if a mention is dexter entity
+     *
+     * @param utterance mention
+     * @param e         threshold of confidence
+     * @return if confidence grater than threshold e, return true，else return false
+     */
+    public static boolean isDexterEntity(String utterance, double e) {
+
+        JSONObject inputObj = new JSONObject();
+        inputObj.put("text", utterance);
+        inputObj.put("wn", "false");
+        inputObj.put("debug", "false");
+        inputObj.put("format", "text");
+
+        String jsonString = HttpsClientUtil.doPostWithParams(dexterLocalUrl, inputObj);
+        if (jsonString != null && !jsonString.isEmpty()) {
+            JSONObject jsonObject = new JSONObject(jsonString);
+
+            JSONArray spots = jsonObject.getJSONArray("spots");
+            for (int i = 0; i < spots.length(); i++) {
+                JSONObject spot = spots.getJSONObject(i);
+                String mention = spot.getString("mention");
+                //System.out.println(mention);
+                if ((double) mention.length() / utterance.length() >= e) {
+                    /*The proportion of the total length is greater than the threshold e*/
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
     public static void main(String[] args) throws IOException {
 
 
@@ -757,21 +840,5 @@ public class LinkingTool {
         System.out.println(eLinkMap);
         System.out.println(rLinkMap);*/
 
-
-        /*KBUtil.init(DatasetEnum.CWQ);
-        String question = "what countries share borders with france and is the location contains and airport that server Nijmegen";
-        System.out.println(getDexterLinking(question));*/
-
-        //System.out.println(getFalconLinking("For how many different teams have the players debuted in Houston Astros played?"));
-
-
-        //System.out.println(recognizeLongEntity(question, new HashMap<>()));
-
-        /*String question = "What is the home stadium of the club coached by Justine Omojong?";
-        System.out.println(getDexterLinking(question));
-        System.out.println(getEARLLinking(question));
-        System.out.println(getFalconLinking(question));*/
-
     }
-
 }

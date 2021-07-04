@@ -1,1 +1,1 @@
-The query logs will be stored in this directory.
+The query logs of EDGQA will be stored in this directory.

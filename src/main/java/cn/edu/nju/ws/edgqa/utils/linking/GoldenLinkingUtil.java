@@ -2,7 +2,7 @@ package cn.edu.nju.ws.edgqa.utils.linking;
 
 import cn.edu.nju.ws.edgqa.domain.beans.Link;
 import cn.edu.nju.ws.edgqa.utils.FileUtil;
-import cn.edu.nju.ws.edgqa.utils.QAArgs;
+import cn.edu.nju.ws.edgqa.main.QAArgs;
 import cn.edu.nju.ws.edgqa.utils.SimilarityUtil;
 import cn.edu.nju.ws.edgqa.utils.enumerates.DatasetEnum;
 import cn.edu.nju.ws.edgqa.utils.enumerates.LinkEnum;

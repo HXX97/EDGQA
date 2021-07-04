@@ -1,4 +1,4 @@
-package cn.edu.nju.ws.edgqa.handler;
+package cn.edu.nju.ws.edgqa.main;
 
 import cn.edu.nju.ws.edgqa.domain.beans.Link;
 import cn.edu.nju.ws.edgqa.domain.beans.LinkMap;
@@ -6,9 +6,9 @@ import cn.edu.nju.ws.edgqa.domain.edg.SparqlGenerator;
 import cn.edu.nju.ws.edgqa.eval.CumulativeIRMetrics;
 import cn.edu.nju.ws.edgqa.eval.Evaluator;
 import cn.edu.nju.ws.edgqa.eval.IRMetrics;
+import cn.edu.nju.ws.edgqa.handler.QASystem;
 import cn.edu.nju.ws.edgqa.utils.FileUtil;
 import cn.edu.nju.ws.edgqa.utils.LogUtil;
-import cn.edu.nju.ws.edgqa.utils.QAArgs;
 import cn.edu.nju.ws.edgqa.utils.UriUtil;
 import cn.edu.nju.ws.edgqa.utils.enumerates.*;
 import cn.edu.nju.ws.edgqa.utils.kbutil.KBUtil;
@@ -29,6 +29,15 @@ import java.util.*;
 public class PointerNetworkQA extends QASystem {
     private static JSONArray lcQuadSparqlArray = new JSONArray(FileUtil.readFileAsString("src/main/resources/datasets/lcquad-test.json"));
     private static JSONArray QALD9SparqlArray = new JSONArray(FileUtil.readFileAsString("src/main/resources/datasets/qald-9-test-en.json"));
+
+    public static void main(String[] args) throws IOException {
+        Options options = QAArgs.getOptions();
+        int run = QAArgs.setArguments(options, args);
+
+        if (run == 0) {
+            runAutoTest();
+        }
+    }
 
     private static String getLogFileName() {
         Date date = new Date();
@@ -247,12 +256,4 @@ public class PointerNetworkQA extends QASystem {
         return QueryType.COMMON;
     }
 
-    public static void main(String[] args) throws IOException {
-        Options options = QAArgs.getOptions();
-        int run = QAArgs.setArguments(options, args);
-
-        if (run == 0) {
-            runAutoTest();
-        }
-    }
 }

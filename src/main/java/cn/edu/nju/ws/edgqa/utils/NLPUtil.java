@@ -2,7 +2,7 @@ package cn.edu.nju.ws.edgqa.utils;
 
 import cn.edu.nju.ws.edgqa.domain.beans.TreeNode;
 import cn.edu.nju.ws.edgqa.domain.edg.EDG;
-import cn.edu.nju.ws.edgqa.utils.linking.DexterEntityLinking;
+import cn.edu.nju.ws.edgqa.utils.linking.LinkingTool;
 import edu.stanford.nlp.ling.CoreAnnotations;
 import edu.stanford.nlp.ling.CoreLabel;
 import edu.stanford.nlp.pipeline.*;
@@ -166,7 +166,7 @@ public class NLPUtil {
         double e = 0.7; // if len(mention) / len(phase) is greater than 0.7, it is identified as an entity
 
         // A dexter2 server is needed, comment it if the server is not available
-        if (DexterEntityLinking.isDexterEntity(phase, e)) {
+        if (LinkingTool.isDexterEntity(phase, e)) {
             return true;
         }
 
@@ -509,56 +509,18 @@ public class NLPUtil {
         return str;
     }
 
-    public static void main(String[] args) throws IOException {
+    public static String TransferParentheses(String s) {
+        return s.replace("(", "[").replace(")", "]");
+    }
 
-        /*        String all = "truest, lastest, smaller, samllest, deepest, Greatest, Best, greater, shortest, shorter, younger, lower, lowest, highest, clostest, kennedy, Nearest, his/her, fewest, Higher,larger, longest, tallest, least, youngest, soonest, More, Truer, Funniest, ernest, older, broader, coolest, Briefer, latest, taller, sparsest, fastest, more, bigger, smalllest, thier, fonder, widest, oldest, oliver, strongest, fitter, richest, southwest, cheaper, Richest, Most, fewer, nearest, lightest, Sweetest, faster, Bluest, biggest, earlier, Noblest, newest, Worst, less, worse, most, longer, eldest, worst, forrest, higher, largest, smallest, best, elder, hitler, Modest, hottest, lester, wealthiest, sweetest, tamer, greatest, Closer, warmest, heaviest, Cheaper, Earliest, earliest, tyler, better, wiser, richer, easier, Biggest, closest";
-        HashSet<String> notCompare = new HashSet<>(
-                Arrays.asList(
-                        "his/her",
-                        "<",
-                        ">",
-                        "truest",
-                        "southwest",
-                        "kennedy",
-                        "truer",
-                        "ernest",
-                        "smalllest",
-                        "thier",
-                        "fonder",
-                        "oliver",
-                        "sweetest",
-                        "noblest",
-                        "hitler",
-                        "modest",
-                        "lester",
-                        "tamer",
-                        "tyler",
-                        "wiser",
-                        "briefer",
-                        "funniest",
-                        "worse",
-                        "clostest",
-                        "worst",
-                        "forrest",
-                        "bluest",
-                        "easier",
-                        "strongest",
-                        "fitter",
-                        "soonest"
-                )
-        );*/
+    public static void main(String[] args) throws IOException {
 
         //String question = "How many different teams have the players debuted in Houston Astros played for?";
         //String syntaxTree = NLPUtil.getSyntaxTree(question);
         //System.out.println(TransferParentheses(syntaxTree));
 
-
-
-
     }
 
-    public static String TransferParentheses(String s) {
-        return s.replace("(", "[").replace(")", "]");
-    }
+
 }
 

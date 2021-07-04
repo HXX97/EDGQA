@@ -1,6 +1,5 @@
-package cn.edu.nju.ws.edgqa.utils;
+package cn.edu.nju.ws.edgqa.main;
 
-import cn.edu.nju.ws.edgqa.handler.EDGQA;
 import cn.edu.nju.ws.edgqa.handler.QuestionSolver;
 import cn.edu.nju.ws.edgqa.utils.enumerates.DatasetEnum;
 import cn.edu.nju.ws.edgqa.utils.enumerates.GoldenMode;

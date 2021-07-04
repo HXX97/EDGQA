@@ -3,7 +3,7 @@ package cn.edu.nju.ws.edgqa.domain.edg;
 import cn.edu.nju.ws.edgqa.domain.beans.TreeNode;
 import cn.edu.nju.ws.edgqa.domain.staticres.WordList;
 import cn.edu.nju.ws.edgqa.utils.NLPUtil;
-import cn.edu.nju.ws.edgqa.utils.QAArgs;
+import cn.edu.nju.ws.edgqa.main.QAArgs;
 import cn.edu.nju.ws.edgqa.utils.enumerates.DatasetEnum;
 import cn.edu.nju.ws.edgqa.utils.enumerates.KBEnum;
 import cn.edu.nju.ws.edgqa.utils.enumerates.QueryType;
@@ -320,13 +320,6 @@ public class EDG {
             }
         }
         return false;
-    }
-
-    public static void main(String[] args) throws IOException {
-        EDG.init(DatasetEnum.LC_QUAD);
-        String question = "Which city's foundeer is John Forbes?";
-        EDG e = new EDG(question);
-        System.out.println(e);
     }
 
     /**
@@ -4461,6 +4454,13 @@ public class EDG {
 
         return result.toString();
 
+    }
+
+    public static void main(String[] args) throws IOException {
+        EDG.init(DatasetEnum.LC_QUAD);
+        String question = "Which city's foundeer is John Forbes?";
+        EDG e = new EDG(question);
+        System.out.println(e);
     }
 
 }

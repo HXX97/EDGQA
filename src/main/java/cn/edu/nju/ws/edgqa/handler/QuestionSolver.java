@@ -8,15 +8,15 @@ import cn.edu.nju.ws.edgqa.domain.edg.EDG;
 import cn.edu.nju.ws.edgqa.domain.edg.Node;
 import cn.edu.nju.ws.edgqa.domain.edg.SparqlGenerator;
 import cn.edu.nju.ws.edgqa.eval.Evaluator;
+import cn.edu.nju.ws.edgqa.main.QAArgs;
 import cn.edu.nju.ws.edgqa.utils.NLPUtil;
-import cn.edu.nju.ws.edgqa.utils.QAArgs;
 import cn.edu.nju.ws.edgqa.utils.SimilarityUtil;
 import cn.edu.nju.ws.edgqa.utils.UriUtil;
 import cn.edu.nju.ws.edgqa.utils.enumerates.*;
 import cn.edu.nju.ws.edgqa.utils.kbutil.KBUtil;
 import cn.edu.nju.ws.edgqa.utils.linking.GoldenLinkingUtil;
 import cn.edu.nju.ws.edgqa.utils.linking.LinkingTool;
-import cn.edu.nju.ws.edgqa.utils.similarity.NeuralRelationDetectionStrategy;
+import cn.edu.nju.ws.edgqa.utils.semanticmatching.NeuralSemanticMatchingScorer;
 import com.google.common.collect.Ordering;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
@@ -785,7 +785,7 @@ public class QuestionSolver {
         }
         String blockString = edg.blockToString(entityID);
 
-        Map<String, Double> sparqlRerankScoreMap = NeuralRelationDetectionStrategy.scoreSet_sparql(blockString, stringMap.keySet());
+        Map<String, Double> sparqlRerankScoreMap = NeuralSemanticMatchingScorer.query_reranking_score(blockString, stringMap.keySet());
         System.out.println("Block String:" + blockString);
         System.out.println("Sparql Rerank Map:" + sparqlRerankScoreMap);
 

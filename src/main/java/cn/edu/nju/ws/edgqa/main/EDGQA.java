@@ -1,4 +1,4 @@
-package cn.edu.nju.ws.edgqa.handler;
+package cn.edu.nju.ws.edgqa.main;
 
 import cn.edu.nju.ws.edgqa.domain.beans.tuple.TwoTuple;
 import cn.edu.nju.ws.edgqa.domain.edg.EDG;
@@ -7,9 +7,11 @@ import cn.edu.nju.ws.edgqa.domain.edg.SparqlGenerator;
 import cn.edu.nju.ws.edgqa.eval.CumulativeIRMetrics;
 import cn.edu.nju.ws.edgqa.eval.Evaluator;
 import cn.edu.nju.ws.edgqa.eval.IRMetrics;
+import cn.edu.nju.ws.edgqa.handler.Detector;
+import cn.edu.nju.ws.edgqa.handler.QASystem;
+import cn.edu.nju.ws.edgqa.handler.QuestionSolver;
 import cn.edu.nju.ws.edgqa.utils.FileUtil;
 import cn.edu.nju.ws.edgqa.utils.LogUtil;
-import cn.edu.nju.ws.edgqa.utils.QAArgs;
 import cn.edu.nju.ws.edgqa.utils.Timer;
 import cn.edu.nju.ws.edgqa.utils.enumerates.DatasetEnum;
 import cn.edu.nju.ws.edgqa.utils.enumerates.GoldenMode;
@@ -37,18 +39,34 @@ import java.util.concurrent.ExecutorService;
  */
 public class EDGQA extends QASystem {
 
-    private static String questionProcess(String str) {
-        if (str == null || str.isEmpty())
-            return str;
-        str = str.trim().toLowerCase();
-        if (str.endsWith("?") || str.endsWith(".")) {
-            str = str.substring(0, str.length() - 1).trim();
-        }
-        return str;
-    }
 
-    public static ExecutorService getPool() {
-        return QASystem.pool;
+    /**
+     * The question solver main function
+     *
+     * @param args the arguments, it is processed by Apache Commons Command-CLI
+     * @throws IOException the IO exception
+     */
+    public static void main(String[] args) throws IOException {
+        Options options = QAArgs.getOptions();
+        int run = QAArgs.setArguments(options, args);
+
+        switch (run) {
+            case 0:
+                runAutoTest();
+                break;
+            case 1:
+                runQA();
+                break;
+            case 2:
+                runTestBySerialNumber();
+                break;
+            case 3:
+                runTestByQuestionId();
+                break;
+            case 4:
+                runAutoCandTest();
+                break;
+        }
     }
 
     /**
@@ -145,6 +163,20 @@ public class EDGQA extends QASystem {
             logFileName += "_golden_generation";
         }
         return logFileName;
+    }
+
+    private static String questionProcess(String str) {
+        if (str == null || str.isEmpty())
+            return str;
+        str = str.trim().toLowerCase();
+        if (str.endsWith("?") || str.endsWith(".")) {
+            str = str.substring(0, str.length() - 1).trim();
+        }
+        return str;
+    }
+
+    public static ExecutorService getPool() {
+        return QASystem.pool;
     }
 
     /**
@@ -587,32 +619,4 @@ public class EDGQA extends QASystem {
         return QueryType.COMMON;
     }
 
-    /**
-     * The question solver main function
-     *
-     * @param args the arguments, it is processed by Apache Commons Command-CLI
-     * @throws IOException the IO exception
-     */
-    public static void main(String[] args) throws IOException {
-        Options options = QAArgs.getOptions();
-        int run = QAArgs.setArguments(options, args);
-
-        switch (run) {
-            case 0:
-                runAutoTest();
-                break;
-            case 1:
-                runQA();
-                break;
-            case 2:
-                runTestBySerialNumber();
-                break;
-            case 3:
-                runTestByQuestionId();
-                break;
-            case 4:
-                runAutoCandTest();
-                break;
-        }
-    }
 }
