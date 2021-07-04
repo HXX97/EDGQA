@@ -28,8 +28,8 @@ import java.util.stream.Collectors;
 public class LinkingTool {
 
     //dexter server IP and port
-    public static final String dexterIP = "114.212.190.19";
-    public static final String dexterLocalUrl = "http://" + dexterIP + ":8080/dexter-webapp/api/rest/spot";
+    public static final String dexterServerIP = "114.212.190.19";
+    public static final String dexterLocalUrl = "http://" + dexterServerIP + ":8080/dexter-webapp/api/rest/spot";
 
     // earl server IP and port
     private static final String earlServerIP = "114.212.190.19";
@@ -824,9 +824,7 @@ public class LinkingTool {
 
     public static void main(String[] args) throws IOException {
 
-
         String question = "Where did these popular aeroplanes - Focke Wulf 260 and Start+Flug H 101 originate?";
-        //String question = "Is the wife of President Obama called Michelle?";
 
         System.out.println("dexter linking:" + getDexterLinking(question));
         System.out.println("========================================");
@@ -834,11 +832,7 @@ public class LinkingTool {
         System.out.println("========================================");
         System.out.println("falcon linking:" + getFalconLinking(question));
         System.out.println("========================================");
-        /*HashMap<String, List<Link>> eLinkMap = new HashMap<>();
-        HashMap<String, List<Link>> rLinkMap = new HashMap<>();
-        getEnsembleLinking(question, eLinkMap, rLinkMap);
-        System.out.println(eLinkMap);
-        System.out.println(rLinkMap);*/
+
 
     }
 }

@@ -103,9 +103,6 @@ public class KBUtil {
     //Determine whether there is any <s,p,?x> x
     public static boolean isSPSatisfiable(String s, String p) {
         String query = "ASK WHERE {" + s + " " + p + " ?x }";
-//        if(query.contains("Marine_Corps_Air_Station_Kaneohe_Bay")) {
-//            System.out.println(query);
-//        }
         return runAskOnVirtuoso(query);
     }
 

@@ -20,3 +20,6 @@ curl -XPOST 'localhost:4999/processQuery' -H 'Content-Type: application/json' -d
 ```
 
 If the linking results are returned, it means the EARL system is set up correctly.
+
+Finally, remember to set the `earlServerIP` and `earlLocalUrl` in
+`src/main/java/cn/edu/nju/ws/edgqa/utils/linking/LinkingTool.java`.

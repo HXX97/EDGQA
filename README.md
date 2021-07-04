@@ -6,36 +6,48 @@ Codes for ISWC 2021 research track paper "EDG-based Question Decomposition for C
 
 - JDK 1.8.0
 - Maven
+- python 3.6
 
-Linking tools and knowledge base dumps are also needed.
+Knowledge base dumps and linking systems are also needed.
 
-### 1.1 Linking tools
+### 1.1 Knowledge Base
 
-`Earl`, `Falcon`, `Dexter` are used. See `src/main/java/cn/edu/nju/ws/edgqa/utils/linking`, and
-fill the server address.
+In EDGQA, `DBpedia 1604` (for lcquad) and `DBpedia 1610` (for qald-9) is stored in `Virtuoso`. 
 
-- [EARL](https://github.com/AskNowQA/EARL)
-- [Falcon](https://github.com/AhmadSakor/falcon)
-- [Dexter](https://github.com/dexter/dexter)
-
-
-### 1.2 Knowledge Base
-
-`DBpedia 1604` is stored in `Virtuoso`. See `src/main/java/cn/edu/nju/ws/edgqa/utils/kbutil/KBUtil.java`, and fill the
-server address.
+You can deploy the dbpedia locally or use the online endpoint (can be incompatible to the datasets). 
+Then fill the server address and port in `src/main/java/cn/edu/nju/ws/edgqa/utils/kbutil/KBUtil.java`.
 
 - [DBpedia 1604](http://downloads.dbpedia.org/2016-04/)
 - [Virtuoso](http://vos.openlinksw.com/owiki/wiki/VOS/VOSDownload)
+
+### 1.2 Linking tools
+
+`Earl`, `Falcon`, `Dexter` are used in EDGQA. 
+
+See directory [linking_tools](https://github.com/HXX97/EDGQA/tree/main/linking_tools), and follow the instructions to set up the three linking systems.
+Then fill in the server address and port in 
+`src/main/java/cn/edu/nju/ws/edgqa/utils/linking/LinkingTool.java`.
+
+For more information:
+- [Dexter](https://github.com/dexter/dexter)
+- [EARL](https://github.com/AskNowQA/EARL)
+- [Falcon](https://github.com/AhmadSakor/falcon)
+
+### 1.3 Semantic matching models
+EDGQA employs bert-based classifier as semantic matching models for relation detection and query reranking.
+
+See directory [models](https://github.com/HXX97/EDGQA/tree/main/models) to deploy the models correctly. 
+
 
 ## 2. Program Arguments
 
 ### 2.1 EDGQA Arguments
 
-Program arguments are defined in `src/main/java/cn/edu/nju/ws/edgqa/utils/QAArgs.java`.
+Program arguments are defined in `src/main/java/cn/edu/nju/ws/edgqa/main/QAArgs.java`.
 
 Running settings for [Intellij IDEA 2019.3 above versions](https://www.jetbrains.com/idea/) are stored in `EDGQA/.run`.
 
-Run `cn/edu/nju/ws/edgqa/handler/EDGQA.java` by following CLI arguments:
+Run `src/main/java/cn/edu/nju/ws/edgqa/main/EDGQA.java` by following CLI arguments:
 
 ```text
 -d --dataset: 'lc-quad', 'qald-9'
@@ -49,7 +61,7 @@ Run `cn/edu/nju/ws/edgqa/handler/EDGQA.java` by following CLI arguments:
 -rr --reranking: 'true' for re-ranking by EDG block, 'false' otherwise
 ```
 
-Because the linking tool consumes a lot of time, caching the linking results of the test queries helps improve the speed
+Because the linking tools consume a lot of time, caching the linking results of the test queries helps improve the speed
 of the test. The cache needs to be built the first time the QA is run and is available when it is run again. Use the
 arguments `use_cache` and `create_cache` above to set the cache tool.
 
@@ -68,6 +80,7 @@ Run `cn/edu/nju/ws/edgqa/handler/PointerNetworkQA.java` by following CLI argumen
 - [PKUmod paraphrase dict](https://github.com/pkumod/Paraphrase/blob/master/dic.txt)
 - [QALD-9](http://2018.nliwod.org/challenge)
 - [BERT by Google Research](https://github.com/google-research/bert)
+- [java-string-similarity](https://github.com/rrice/java-string-similarity)
 
 ## 4. Contact
 

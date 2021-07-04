@@ -37,3 +37,5 @@ curl -XPOST -H 'Content-Type: application/json' -d '{"text":"In how many places 
 
 If the linking results are returned, it means the falcon system is set up correctly.
 
+Finally, remember to set the `falconServerIP` and `falconLocalUrl` in
+`src/main/java/cn/edu/nju/ws/edgqa/utils/linking/LinkingTool.java`.

@@ -18,12 +18,12 @@ To check whether the service is available,
 run 
 ```
 curl -XPOST 'http://127.0.0.1:8080/dexter-webapp/api/rest/spot' -H 'Content-Type: application/json' --data-urlencode "text=Brazilian state-run giant oil company Perobras signed a three-year technology and research cooperation agreement with oil service provider Halliburton."   --data "wn=false"   --data "debug=false"
-``` 
-
-
+```
 
 For more information, please refer to the official repository of dexter: https://github.com/dexter/dexter
 
- 
+### Setting in EDGQA
+Remember to set the `dexterServerIP` and `dexterLocalUrl` in
+`src/main/java/cn/edu/nju/ws/edgqa/utils/linking/LinkingTool.java`.
 
 
