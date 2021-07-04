@@ -56,7 +56,7 @@ as natural language phrases and KB relations).
    ```
 3. test the block query reranking service for qald
    by 
-   ```shell
+   ```shell   
    curl -XPOST '127.0.0.1:5684/query_rerank' -H 'Content-Type: application/json' -d '{"edg_block": "[BLK]  [DES] are the bands associated with #entity1 [BLK]  [DES] the artists of My Favorite Girl", "sparql_queries": ["\t [TRP] ?e1 Artist My Favorite Girl (Dave Hollister song) [TRP] ?e0 associated musical artist ?e1"]}'
    ```
 
