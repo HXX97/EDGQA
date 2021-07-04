@@ -548,9 +548,12 @@ public class NLPUtil {
                 )
         );*/
 
-        String question = "How many different teams have the players debuted in Houston Astros played for?";
-        String syntaxTree = NLPUtil.getSyntaxTree(question);
-        System.out.println(TransferParentheses(syntaxTree));
+        //String question = "How many different teams have the players debuted in Houston Astros played for?";
+        //String syntaxTree = NLPUtil.getSyntaxTree(question);
+        //System.out.println(TransferParentheses(syntaxTree));
+
+
+
 
     }
 

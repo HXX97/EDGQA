@@ -17,7 +17,7 @@ It will start a service listening to port `8080`.
 To check whether the service is available, 
 run 
 ```
-curl -XGET http://114.212.190.19:8080/dexter-webapp/api/rest/annotate?text=Bob%20Dylan%20and%20Johnny%20Cash%20had%20formed%20a%20mutual%20admiration%20society%20even%20before%20they%20met%20in%20the%20early%201960s&n=50&wn=false&debug=false&format=text&min-conf=0.5
+curl -XPOST 'http://127.0.0.1:8080/dexter-webapp/api/rest/spot' -H 'Content-Type: application/json' --data-urlencode "text=Brazilian state-run giant oil company Perobras signed a three-year technology and research cooperation agreement with oil service provider Halliburton."   --data "wn=false"   --data "debug=false"
 ``` 
 
 

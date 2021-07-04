@@ -20,13 +20,8 @@ from difflib import SequenceMatcher
 import spacy
 nlp = spacy.load('en')
 
-# dbpediaSPARQL="http://node1.research.tib.eu:4001/sparql"
-# dbpediaSPARQL = "http://210.28.132.61:8898/sparql"
-# dbpediaSPARQL = "http://114.212.86.218:8890/sparql"
 dbpediaSPARQL = "http://210.28.134.34:8892/sparql"
-# dbpediaSPARQL2="http://node1.research.tib.eu:4001/sparql"
 dbpediaSPARQL2 = "http://210.28.134.34:8892/sparql"
-# dbpediaSPARQL2 = "http://210.28.132.61:8898/sparql"
 stopWordsList = stopwords.getStopWords()
 comparsion_words = stopwords.getComparisonWords()
 

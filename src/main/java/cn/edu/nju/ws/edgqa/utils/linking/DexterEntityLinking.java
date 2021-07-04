@@ -1,6 +1,7 @@
 package cn.edu.nju.ws.edgqa.utils.linking;
 
 import cn.edu.nju.ws.edgqa.utils.connect.HttpUtil;
+import cn.edu.nju.ws.edgqa.utils.connect.HttpsClientUtil;
 import cn.edu.nju.ws.edgqa.utils.enumerates.KBEnum;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -22,8 +23,9 @@ import java.util.List;
 public class DexterEntityLinking {
 
     public static final String dexterIP = "114.212.190.19";
-    public static final String dexterSpotUrl = "http://" + dexterIP + ":8080/dexter-webapp/api/rest/spot?&wn=false&debug=false&format=text&text=";
-    public static final String dexterAnnotateUrl = "http://" + dexterIP + ":8080/dexter-webapp/api/rest/annotate?&n=50&wn=false&debug=false&format=text&min-conf=0.5&text=";
+
+    public static final String dexterLocalUrl = "http://" + dexterIP + ":8080/dexter-webapp/api/rest/spot";
+
 
     /**
      * return entity and its candidateID detected by dexter2
@@ -36,11 +38,17 @@ public class DexterEntityLinking {
         HashMap<String, List<Integer>> result = new HashMap<>();
 
         String url = null;
-        try {
-            url = dexterSpotUrl + URLEncoder.encode(question, "UTF-8");
-            //url = dexterAnnotateUrl+URLEncoder.encode(question,"UTF-8");
-            String jsonString = HttpUtil.loadJson(url);
 
+        JSONObject inputObj = new JSONObject();
+        inputObj.put("text", question);
+        inputObj.put("wn", "false");
+        inputObj.put("debug", "false");
+        inputObj.put("format", "text");
+
+        url = dexterLocalUrl;
+        String jsonString = HttpsClientUtil.doPostWithParams(url, inputObj);
+
+        if(jsonString!=null&&!jsonString.isEmpty()) {
             JSONObject jsonObject = new JSONObject(jsonString);
             //System.out.println(jsonObject.toString(4));
             JSONArray spots = jsonObject.getJSONArray("spots");
@@ -61,15 +69,9 @@ public class DexterEntityLinking {
                 }
                 result.put(mention, res);
             }
-            //System.out.println(jsonObject);
-            //System.out.println(loadJson(url));
-
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
         }
         return result;
     }
-
 
     /**
      * judge if a mention is dexter entity
@@ -79,10 +81,16 @@ public class DexterEntityLinking {
      * @return if confidence grater than threshold e, return true，else return false
      */
     public static boolean isDexterEntity(String utterance, double e) {
-        try {
-            String url = dexterAnnotateUrl + URLEncoder.encode(utterance, "UTF-8");
-            String jsonString = HttpUtil.loadJson(url);
-            //System.out.println(jsonString);
+
+
+        JSONObject inputObj = new JSONObject();
+        inputObj.put("text", utterance);
+        inputObj.put("wn", "false");
+        inputObj.put("debug", "false");
+        inputObj.put("format", "text");
+
+        String jsonString = HttpsClientUtil.doPostWithParams(dexterLocalUrl, inputObj);
+        if (jsonString != null && !jsonString.isEmpty()) {
             JSONObject jsonObject = new JSONObject(jsonString);
 
             JSONArray spots = jsonObject.getJSONArray("spots");
@@ -90,19 +98,22 @@ public class DexterEntityLinking {
                 JSONObject spot = spots.getJSONObject(i);
                 String mention = spot.getString("mention");
                 //System.out.println(mention);
-                if ((double) mention.length() / utterance.length() >= e) { //The proportion of the total length is greater than the threshold e
+                if ((double) mention.length() / utterance.length() >= e) {
+                    /*The proportion of the total length is greater than the threshold e*/
                     return true;
                 }
             }
-
-        } catch (UnsupportedEncodingException e1) {
-            e1.printStackTrace();
         }
+
+
         return false;
     }
 
-    public static void main(String[] args){
+    public static void main(String[] args) {
         String question = "Which architect of Marine Corps Air Station Kaneohe Bay was also tenant of New Sanno hotel";
         System.out.println(getCandidateEntityIDs(question));
+        //System.out.println(getCandidateEntityIDs_new(question));
+
+        System.out.println(isDexterEntity("Barack Obama", 0.8));
     }
 }
