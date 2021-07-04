@@ -63,7 +63,7 @@ public class Detector {
         //paraphrase dict
         List<Paraphrase> paraphraseList = new ArrayList<>();
         try {
-            paraphraseList = FileUtil.loadParaphrase("src/main/resources/nlp/pkumod-dbpedia-paraphrase_dict.txt", "\t", true);
+            paraphraseList = FileUtil.loadParaphrase("src/main/resources/nlp/relation_paraphrase_dict.txt", "\t", true);
         } catch (IOException e) {
             e.printStackTrace();
         }
