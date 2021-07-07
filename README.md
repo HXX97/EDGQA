@@ -4,7 +4,24 @@ Codes for ISWC 2021 research track paper "EDG-based Question Decomposition for C
 
 ## What is EDGQA?
 
-EDGQA is a QA system over knowledge bases based on Entity-Description Graphs. Currently EDGQA has been implemented for DBpedia, tested on LC-QuAD 1.0 and QALD-9.
+EDGQA is a QA system over knowledge bases based on Entity-Description Graphs (EDGs). Currently EDGQA has been implemented for DBpedia, tested on LC-QuAD 1.0 and QALD-9.
+
+
+
+![image-20210707111759566](README.assets/image-20210707111759566.png)
+
+The above figure shows SPARQL (a. and c.) and EDG (b. and d.) on two exemplar natural language questions. The dashed line connects a description to an intermediate entity.
+The types of nodes and edges of EDG is defined as follows.
+
+
+
+![image-20210707111936154](README.assets/image-20210707111936154.png)
+
+
+
+By generating such EDGs, questions are represented as a combination of entities and their description, providing a structure for understanding and answering complex questions. More information are detailed in our paper.
+
+
 
 ## 1. Requirements
 
@@ -88,4 +105,5 @@ Run `cn/edu/nju/ws/edgqa/handler/PointerNetworkQA.java` by following CLI argumen
 
 ## 4. Contact
 
-Feel free to create a GitHub Issue or send an e-mail.
+Feel free to create a [GitHub Issue](https://github.com/HXX97/EDGQA/issues) or send an e-mail. We look forward to receiving your feedback.
+
