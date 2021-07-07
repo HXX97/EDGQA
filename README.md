@@ -2,6 +2,10 @@
 
 Codes for ISWC 2021 research track paper "EDG-based Question Decomposition for Complex Question Answering over Knowledge Bases".
 
+## What is EDGQA?
+
+EDGQA is a QA system over knowledge bases based on Entity-Description Graphs. Currently EDGQA has been implemented for DBpedia, tested on LC-QuAD 1.0 and QALD-9.
+
 ## 1. Requirements
 
 - JDK 1.8.0
