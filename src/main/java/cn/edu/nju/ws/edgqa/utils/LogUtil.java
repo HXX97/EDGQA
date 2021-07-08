@@ -76,8 +76,7 @@ public class LogUtil {
             str = "[WARN] " + str;
         }
 
-
-        if (withStdOutMap.containsKey(writer))
+        if (withStdOutMap.containsKey(writer) && withStdOutMap.get(writer))
             System.out.print(str);
 
         if (!fileOut || !writerMap.containsKey(writer)) return;

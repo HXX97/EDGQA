@@ -131,7 +131,7 @@ public class Evaluator {
     public static String getEntityLinkingMetricsStr() {
         try {
             return "Entity Linking P: " + entityLinkingMetrics.getPrecision() + ", R: " + entityLinkingMetrics.getRecall() +
-                    ", micro F1: " + entityLinkingMetrics.getMicroF1() + ", macro F1: "
+                    ", micro F1: " + entityLinkingMetrics.getAverageF1() + ", macro F1: "
                     + entityLinkingMetrics.getMacroF1();
         } catch (Exception e) {
             e.printStackTrace();
@@ -142,7 +142,7 @@ public class Evaluator {
     public static String getRelationLinkingMetricsStr() {
         try {
             return "Relation Linking P: " + relationLinkingMetrics.getPrecision() + ", R: " + relationLinkingMetrics.getRecall() +
-                    ", micro F1: " + relationLinkingMetrics.getMicroF1() + ", macro F1: "
+                    ", micro F1: " + relationLinkingMetrics.getAverageF1() + ", macro F1: "
                     + relationLinkingMetrics.getMacroF1();
         } catch (Exception e) {
             e.printStackTrace();
@@ -153,7 +153,7 @@ public class Evaluator {
     public static String getTypeLinkingMetricsStr() {
         try {
             return "Type Linking P: " + typeLinkingMetrics.getPrecision() + ", R: " + typeLinkingMetrics.getRecall() +
-                    ", micro F1: " + typeLinkingMetrics.getMicroF1() + ", macro F1: "
+                    ", micro F1: " + typeLinkingMetrics.getAverageF1() + ", macro F1: "
                     + typeLinkingMetrics.getMacroF1();
         } catch (Exception e) {
             e.printStackTrace();

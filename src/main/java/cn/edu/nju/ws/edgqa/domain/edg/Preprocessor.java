@@ -1,5 +1,7 @@
 package cn.edu.nju.ws.edgqa.domain.edg;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -65,7 +67,7 @@ public class Preprocessor {
         return question;
     }
 
-    public static String rewriteQALDSparql(String goldenQueryStr) {
+    public static String rewriteQALDSparql(@NotNull String goldenQueryStr) {
         String res = goldenQueryStr;
         if (goldenQueryStr.contains("ASK WHERE"))
             return res;

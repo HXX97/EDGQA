@@ -56,7 +56,7 @@ public class CumulativeIRMetrics {
         return cumulativeRecall / numSample;
     }
 
-    public double getMicroF1() {
+    public double getAverageF1() {
         if (numSample == 0)
             return 0.0;
         return cumulativeMicroF1 / numSample;
@@ -69,10 +69,10 @@ public class CumulativeIRMetrics {
     }
 
     public String toString() {
-        return "sample: " + numSample + ", P: " + decimalFormat.format(getPrecision()) + ", R: " + decimalFormat.format(getRecall()) + ", macro F1: " + decimalFormat.format(getMicroF1()) + ", macro F1*: " + decimalFormat.format(getMacroF1());
+        return "sample: " + numSample + ", P: " + decimalFormat.format(getPrecision()) + ", R: " + decimalFormat.format(getRecall()) + ", macro F1: " + decimalFormat.format(getMacroF1());
     }
 
     public String toQALDString() {
-        return "sample: " + numSample + ", P: " + decimalFormat.format(getPrecision()) + ", R: " + decimalFormat.format(getRecall()) + ", macro F1: " + decimalFormat.format(getMicroF1()) + ", QALD macro F1: " + decimalFormat.format(getMacroF1());
+        return "sample: " + numSample + ", P: " + decimalFormat.format(getPrecision()) + ", R: " + decimalFormat.format(getRecall()) + ", average F1: " + decimalFormat.format(getAverageF1()) + ", QALD macro F1: " + decimalFormat.format(getMacroF1());
     }
 }

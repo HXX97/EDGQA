@@ -477,7 +477,7 @@ public class EDGQA extends QASystem {
             LogUtil.printlnInfo("queryLog", "QALD Cumulative metrics, " + QALDcumulativeIRMetrics.toQALDString());
         }
 
-        LogUtil.printlnInfo("queryLog", "Current time: " + (System.currentTimeMillis() - questionStartTime) + " ms, average: "
+        LogUtil.printlnInfo("queryLog", "Current question consumed time: " + (System.currentTimeMillis() - questionStartTime) + " ms, average: "
                 + QAArgs.decimalFormat.format((double) (System.currentTimeMillis() - startTime) / curQuesNum)
                 + " ms/ques, entity detection: " + QAArgs.decimalFormat.format((double) Timer.totalEntityLinkingTime / curQuesNum)
                 + " ms/ques (linking tool: " + QAArgs.decimalFormat.format((double) Timer.totalEntityLinkingToolTime / curQuesNum)
