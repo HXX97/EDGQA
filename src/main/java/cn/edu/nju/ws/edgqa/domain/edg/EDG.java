@@ -525,7 +525,7 @@ public class EDG {
         // generate syntax treeNode of taggedQuestion
         this.syntaxTreeText = NLPUtil.getSyntaxTree(taggedQuestion);
         this.syntaxTreeNode = createTree(this.syntaxTreeText);
-        System.out.println(NLPUtil.TransferParentheses(this.syntaxTreeText));
+        System.out.println(NLPUtil.transferParentheses(this.syntaxTreeText));
 
         // parse the syntaxTree, generate nodes and edges
         Sent(this.syntaxTreeNode);
@@ -4023,7 +4023,7 @@ public class EDG {
                             secondNode = matcher1.group(2);
                         } else {
                             firstNode = tempQuestion;
-                            String syntaxTree = NLPUtil.TransferParentheses(NLPUtil.getSyntaxTree(tempQuestion));
+                            String syntaxTree = NLPUtil.transferParentheses(NLPUtil.getSyntaxTree(tempQuestion));
                             System.out.println(syntaxTree);
                             TreeNode rootNode = createTree(syntaxTree);
                             LinkedList<TreeNode> toSearch = new LinkedList<>();
