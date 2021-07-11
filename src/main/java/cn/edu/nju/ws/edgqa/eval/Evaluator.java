@@ -139,7 +139,7 @@ public class Evaluator {
         return null;
     }
 
-    public static String getRelationLinkingMetricsStr() {
+    public static String  getRelationLinkingMetricsStr() {
         try {
             return "Relation Linking P: " + relationLinkingMetrics.getPrecision() + ", R: " + relationLinkingMetrics.getRecall() +
                     ", micro F1: " + relationLinkingMetrics.getAverageF1() + ", macro F1: "

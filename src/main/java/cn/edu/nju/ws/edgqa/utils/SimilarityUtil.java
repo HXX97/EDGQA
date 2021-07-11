@@ -221,7 +221,7 @@ public class SimilarityUtil {
         }
 
         //semantic similarity
-        double semanticScore = score;
+        double paraphraseScore = score;
 
         //Reverse score will cause semantic drift
         /*paraphraseSet = ParaphraseUtil.getParaphraseOfMention(mention);
@@ -235,7 +235,7 @@ public class SimilarityUtil {
         }
 
         //return Double.max(lexicalScore, semanticScore);
-        return (lexicalScore + semanticScore) / 2;
+        return (lexicalScore + paraphraseScore) / 2;
     }
 
     /**
