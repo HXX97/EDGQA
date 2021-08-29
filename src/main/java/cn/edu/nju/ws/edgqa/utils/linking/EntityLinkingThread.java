@@ -2,7 +2,9 @@ package cn.edu.nju.ws.edgqa.utils.linking;
 
 import cn.edu.nju.ws.edgqa.domain.beans.Link;
 import cn.edu.nju.ws.edgqa.utils.FileUtil;
+import org.apache.jena.base.Sys;
 import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.util.List;
 import java.util.Map;
@@ -37,15 +39,27 @@ public class EntityLinkingThread implements Callable<Map<String, List<Link>>> {
 
     public static void main(String[] args) {
         JSONArray data = new JSONArray(FileUtil.readFileAsString("src/main/resources/datasets/lcquad-test.json"));
+        JSONObject dexterRes = new JSONObject();
+        JSONObject earlRes = new JSONObject();
         for (int idx = 0; idx < data.length(); idx++) {
             String question = data.getJSONObject(idx).getString("corrected_question");
+
             Map<String, List<Link>> dexterLink = LinkingTool.getDexterLinking(question);
+            try {
+                Thread.sleep(300);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
             Map<String, List<Link>> earlLink = LinkingTool.getEARLLinking(question);
 
-            System.out.println(question);
-            System.out.println(dexterLink);
-            System.out.println(earlLink);
+            System.out.println("[question " + idx + "] " + question);
+            dexterRes.put(Integer.toString(idx), dexterLink);
+            earlRes.put(Integer.toString(idx), earlLink);
             System.out.println();
+            if (idx % 10 == 0) {
+                FileUtil.writeStringToFile(dexterRes.toString(), "query_logs/dexter_link.json");
+                FileUtil.writeStringToFile(earlRes.toString(), "query_logs/earl_link.json");
+            }
         }
     }
 }
