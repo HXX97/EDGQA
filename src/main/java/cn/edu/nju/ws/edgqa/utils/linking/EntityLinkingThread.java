@@ -1,7 +1,8 @@
 package cn.edu.nju.ws.edgqa.utils.linking;
 
 import cn.edu.nju.ws.edgqa.domain.beans.Link;
-import cn.edu.nju.ws.edgqa.utils.linking.LinkingTool;
+import cn.edu.nju.ws.edgqa.utils.FileUtil;
+import org.json.JSONArray;
 
 import java.util.List;
 import java.util.Map;
@@ -31,5 +32,20 @@ public class EntityLinkingThread implements Callable<Map<String, List<Link>>> {
             res = LinkingTool.getFalconLinking(nodeStr);
         }
         return res;
+    }
+
+
+    public static void main(String[] args) {
+        JSONArray data = new JSONArray(FileUtil.readFileAsString("src/main/resources/datasets/lcquad-test.json"));
+        for (int idx = 0; idx < data.length(); idx++) {
+            String question = data.getJSONObject(idx).getString("corrected_question");
+            Map<String, List<Link>> dexterLink = LinkingTool.getDexterLinking(question);
+            Map<String, List<Link>> earlLink = LinkingTool.getEARLLinking(question);
+
+            System.out.println(question);
+            System.out.println(dexterLink);
+            System.out.println(earlLink);
+            System.out.println();
+        }
     }
 }

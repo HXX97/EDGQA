@@ -131,7 +131,7 @@ public class LinkingTool {
             jsonObject.put("k", k);
             try {
 
-                String url = falconURL+ k;
+                String url = falconURL + k;
                 String response = HttpsClientUtil.doPost(url, jsonObject.toString());
                 //System.out.println(response);
                 if (response != null) {
@@ -763,7 +763,7 @@ public class LinkingTool {
         url = dexterLocalUrl;
         String jsonString = HttpsClientUtil.doPostWithParams(url, inputObj);
 
-        if(jsonString!=null&&!jsonString.isEmpty()) {
+        if (jsonString != null && !jsonString.isEmpty()) {
             JSONObject jsonObject = new JSONObject(jsonString);
             //System.out.println(jsonObject.toString(4));
             JSONArray spots = jsonObject.getJSONArray("spots");
