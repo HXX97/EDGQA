@@ -1,10 +1,7 @@
 import csv
 import numpy as np
 
-''' 
-评测脚本，判断二分类是否正确
 
-'''
 test_tsv = '/home/home2/xxhu/bert/data/test.tsv'
 test_results_tsv = '/home/home2/xxhu/bert/data/test_results.tsv'
 

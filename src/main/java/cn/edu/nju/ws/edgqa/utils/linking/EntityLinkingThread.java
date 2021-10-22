@@ -15,7 +15,6 @@ public class EntityLinkingThread implements Callable<Map<String, List<Link>>> {
     public static final int LINKING_EARL = 1;
     public static final int LINKING_FALCON = 2;
     private final String nodeStr;
-    private Thread t;
     private int linkingTool = -1;
 
     public EntityLinkingThread(int linkingTool, String nodeStr, Map<String, List<Link>> resultMap) {

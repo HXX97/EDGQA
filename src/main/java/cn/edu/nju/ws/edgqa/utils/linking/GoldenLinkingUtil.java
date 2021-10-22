@@ -1,8 +1,8 @@
 package cn.edu.nju.ws.edgqa.utils.linking;
 
 import cn.edu.nju.ws.edgqa.domain.beans.Link;
-import cn.edu.nju.ws.edgqa.utils.FileUtil;
 import cn.edu.nju.ws.edgqa.main.QAArgs;
+import cn.edu.nju.ws.edgqa.utils.FileUtil;
 import cn.edu.nju.ws.edgqa.utils.SimilarityUtil;
 import cn.edu.nju.ws.edgqa.utils.enumerates.DatasetEnum;
 import cn.edu.nju.ws.edgqa.utils.enumerates.LinkEnum;
@@ -15,8 +15,6 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 public class GoldenLinkingUtil {
@@ -61,72 +59,6 @@ public class GoldenLinkingUtil {
             res.add(str.substring(begin, end));
         }
         return res;
-    }
-
-    /**
-     * Get all the dbr from the golden sparql
-     *
-     * @param goldenSparql the golden sparql query
-     * @return a set of golden entity linking results
-     */
-    public static Set<String> getGoldenEntityLinkBySparql(String goldenSparql) {
-        Set<String> res = new HashSet<>();
-        if (QAArgs.getDataset() == DatasetEnum.LC_QUAD) {
-            String pattern = "<http://dbpedia.org/resource/(.*?)>";
-            Pattern r = Pattern.compile(pattern);
-            Matcher m = r.matcher(goldenSparql);
-            while (m.find()) {
-                res.add(m.group());
-            }
-        }
-        return removeAngleBrackets(res);
-    }
-
-    /**
-     * Get all the dbp and lowercase dbo from the golden sparql
-     *
-     * @param goldenSparql the golden sparql query
-     * @return a set of golden relation linking results
-     */
-    public static Set<String> getGoldenRelationLinkBySparql(String goldenSparql) {
-        Set<String> res = new HashSet<>();
-        if (QAArgs.getDataset() == DatasetEnum.LC_QUAD) {
-            String pattern = "<http://dbpedia.org/property/(.*?)>";
-            Pattern propertyPattern = Pattern.compile(pattern);
-            Matcher propertyMatcher = propertyPattern.matcher(goldenSparql);
-            while (propertyMatcher.find()) {
-                res.add(propertyMatcher.group());
-            }
-
-            pattern = "<http://dbpedia.org/ontology/(.*?)>";
-            Pattern ontologyPattern = Pattern.compile(pattern);
-            Matcher ontologyMatcher = ontologyPattern.matcher(goldenSparql);
-            while (ontologyMatcher.find()) {
-                res.add(ontologyMatcher.group());
-            }
-        }
-        res.removeIf(link -> link.startsWith("<http://dbpedia.org/ontology/") && Character.isUpperCase(link.charAt(29)));
-        return removeAngleBrackets(res);
-    }
-
-    /**
-     * Get all the uppercase dbo from the golden sparql
-     *
-     * @param goldenSparql the golden sparql query
-     * @return a set of golden type linking results
-     */
-    public static Set<String> getGoldenTypeLinkBySparql(String goldenSparql) {
-        Set<String> res = new HashSet<>();
-        if (QAArgs.getDataset() == DatasetEnum.LC_QUAD) {
-            String pattern = "<http://dbpedia.org/ontology/(.*?)>";
-            Pattern p = Pattern.compile(pattern);
-            Matcher m = p.matcher(goldenSparql);
-            while (m.find()) {
-                res.add(m.group());
-            }
-        }
-        res.removeIf(link -> link.startsWith("<http://dbpedia.org/ontology/") && Character.isLowerCase(link.charAt(29)));
-        return removeAngleBrackets(res);
     }
 
     public static List<Link> getGoldenEntityLinkBySerialNumber(int serialNumber) {
@@ -288,22 +220,4 @@ public class GoldenLinkingUtil {
     }
 
 
-    /**
-     * Get the entity/relation/type golden linking list by serial number of a question.
-     * Designed for dataset QALD-7
-     *
-     * @param serialNumber a serial number of a question
-     * @return the entity/relation/type golden linking list
-     */
-    public static List<Link> getGoldenLinkBySerialNumber(int serialNumber) {
-        List<Link> res = new ArrayList<>();
-        JSONObject quesJSONObject = getAnsArrayAt(serialNumber);
-        assert quesJSONObject != null;
-        JSONArray mappingArray = quesJSONObject.getJSONArray("mapping");
-        for (int j = 0; j < mappingArray.length(); j++) {
-            JSONObject mappingObj = mappingArray.getJSONObject(j);
-            res.add(new Link(mappingObj.getString("label"), mappingObj.getString("uri"), LinkEnum.UNKNOWN));
-        }
-        return res;
-    }
 }

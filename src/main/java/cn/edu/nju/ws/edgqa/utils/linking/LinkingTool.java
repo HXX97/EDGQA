@@ -259,7 +259,7 @@ public class LinkingTool {
      * @param tool     the linking tool
      */
     public static void getToolLinkingMaps(String sentence, Map<String, List<Link>> eLinkMap, Map<String, List<Link>> rLinkMap, ToolEnum tool) {
-        Map<String, List<Link>> toolLinkingMap = null;
+        Map<String, List<Link>> toolLinkingMap;
         if (tool == ToolEnum.EARL) {
             toolLinkingMap = getEARLLinking(sentence);
         } else if (tool == ToolEnum.FALCON) {
@@ -486,7 +486,6 @@ public class LinkingTool {
             double mentionConfidence = SimilarityUtil.getMentionConfidence(key, entityLinkMap);
             if (mentionConfidence <= 0.5) {
                 it.remove();
-                continue;
             }
 
         }
@@ -573,25 +572,12 @@ public class LinkingTool {
                 if (link1.getUri().startsWith("http://dbpedia.org/property/")
                         && link2.getUri().startsWith("http://dbpedia.org/ontology/")) {
                     // swap
-                    //toDeleteList.add(i);
                     relationLinkList.set(i, link2);
                     relationLinkList.set(i + 1, link1);
-                } else if (link2.getUri().startsWith("http://dbpedia.org/property/")
-                        && link1.getUri().startsWith("http://dbpedia.org/ontology/")) {
-                    //toDeleteList.add(i + 1);
                 }
             }
         }
 
-       /* //There are duplicate dbo/dbp
-        if (!toDeleteList.isEmpty()) {
-            //Delete from back to front
-            toDeleteList.sort(Collections.reverseOrder());
-            for (Integer index : toDeleteList) {
-                int i = index; //Unboxing
-                relationLinkList.remove(i);
-            }
-        }*/
     }
 
     /**
@@ -607,17 +593,6 @@ public class LinkingTool {
         ArrayList<QuerySolution> querySolutions = KBUtil.runQuery(QueryFactory.create(query));
         if (querySolutions.isEmpty()) return false;
         return querySolutions.get(0).getLiteral("__ask_retval").toString().equals("1^^http://www.w3.org/2001/XMLSchema#integer");
-    }
-
-    public static HashMap<String, List<Link>> getLiteralLinking(String sentence) {
-        sentence = sentence.trim().replaceAll(" ", "_");
-        HashMap<String, List<Link>> resultMap = new HashMap<>();
-        literallyDetection(sentence, resultMap);
-
-        sentence = sentence.replaceAll("_", "");
-        literallyDetection(sentence, resultMap);
-
-        return resultMap;
     }
 
     public static void literallyDetection(String sentence, HashMap<String, List<Link>> resultMap) {
@@ -752,7 +727,7 @@ public class LinkingTool {
 
         HashMap<String, List<Integer>> result = new HashMap<>();
 
-        String url = null;
+        String url;
 
         JSONObject inputObj = new JSONObject();
         inputObj.put("text", question);
