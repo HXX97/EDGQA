@@ -90,9 +90,9 @@ EDGQA employs bert-based classifier as semantic matching models for relation det
 See directory [models](https://github.com/HXX97/EDGQA/tree/main/models) to deploy the models correctly. 
 
 
-## 2. Program Arguments
+## 2. Run QA
 
-### 2.1 EDGQA Arguments
+### 2.1 Run EDGQA
 
 Program arguments are defined in `src/main/java/cn/edu/nju/ws/edgqa/main/QAArgs.java`.
 
@@ -118,7 +118,7 @@ arguments `use_cache` and `create_cache` above to set the cache tool.
 
 **[Optional]** The cache of linking results is available on this [Google Drive dir](https://drive.google.com/drive/folders/1-JX9VfyDqA51aVZ35HSCtSkvTLpsc-Aw?usp=sharing). Please set it to the current directory, i.e., `EDGQA/cache`. It is optional for running EDGQA. 
 
-### 2.2 PointerNetwork Arguments
+### 2.2 Run PointerNetworkQA
 
 Run `cn/edu/nju/ws/edgqa/handler/PointerNetworkQA.java` by following CLI arguments:
 
